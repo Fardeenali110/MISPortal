@@ -1,0 +1,122 @@
+﻿/* MIS Portal Custom Styles */
+
+/* Sidebar styling */
+.sidebar {
+    position: fixed;
+    top: 56px; /* Height of navbar */
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* Main content area */
+main {
+    padding-top: 20px;
+}
+
+/* Card hover effects */
+.card {
+    transition: transform 0.2s;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+/* Table styling */
+.table th {
+    background-color: #f8f9fa;
+    border-top: none;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0,123,255,0.05);
+}
+
+/* Button styling */
+.btn-rounded {
+    border-radius: 50px;
+}
+
+/* Status badges */
+.badge-online {
+    background-color: #28a745;
+    color: white;
+}
+
+.badge-offline {
+    background-color: #dc3545;
+    color: white;
+}
+
+.badge-pending {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+/* Dashboard KPI cards */
+.kpi-card {
+    border-left: 4px solid;
+    border-radius: 8px;
+}
+
+.kpi-card-employee {
+    border-left-color: #007bff;
+}
+
+.kpi-card-department {
+    border-left-color: #28a745;
+}
+
+.kpi-card-attendance {
+    border-left-color: #ffc107;
+}
+
+.kpi-card-revenue {
+    border-left-color: #dc3545;
+}
+
+/* Form validation */
+.field-validation-error {
+    color: #dc3545;
+    font-size: 0.875em;
+}
+
+.input-validation-error {
+    border-color: #dc3545;
+}
+
+/* Loading spinner */
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        position: static;
+        height: auto;
+        padding-top: 0;
+    }
+
+    .sidebar-sticky {
+        height: auto;
+    }
+
+    main {
+        margin-left: 0;
+    }
+}

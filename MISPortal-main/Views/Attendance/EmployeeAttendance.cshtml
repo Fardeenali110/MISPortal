@@ -1,0 +1,180 @@
+﻿@model IEnumerable<MisProject.Controllers.AttendanceController.AttendanceDto>
+
+@{
+    ViewBag.Title = "Employee Attendance History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-12">
+            <h2><i class="fas fa-history"></i> Employee Attendance History</h2>
+        </div>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    <!-- Employee Info -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-1">
+                                <i class="fas fa-user-circle me-2"></i>
+                                @ViewBag.EmployeeName
+                            </h4>
+                            <div class="text-muted">
+                                <i class="fas fa-id-card me-1"></i> Employee ID: @ViewBag.EmployeeId
+                                <span class="mx-2">•</span>
+                                <i class="fas fa-hashtag me-1"></i> Code: @ViewBag.EmployeeCode
+                            </div>
+                        </div>
+                        <div>
+                            <a href="/Attendance" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i> Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    @if (Model != null && Model.Any())
+    {
+        int presentCount = Model.Count(m => m.Status == 1);
+        int absentCount = Model.Count(m => m.Status == 2);
+        int leaveCount = Model.Count(m => m.Status == 3);
+        int totalDays = Model.Count();
+        double attendancePercentage = totalDays > 0 ? Math.Round((presentCount * 100.0) / totalDays, 1) : 0;
+
+        <div class="row mb-4">
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-white bg-primary">
+                    <div class="card-body text-center">
+                        <h6>Total Days</h6>
+                        <h3>@totalDays</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-white bg-success">
+                    <div class="card-body text-center">
+                        <h6>Present Days</h6>
+                        <h3>@presentCount</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-white bg-danger">
+                    <div class="card-body text-center">
+                        <h6>Absent Days</h6>
+                        <h3>@absentCount</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-white bg-warning">
+                    <div class="card-body text-center">
+                        <h6>Attendance %</h6>
+                        <h3>@attendancePercentage%</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Attendance Records -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Attendance Records</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Day</th>
+                                        <th>Status</th>
+                                        <th>Check-In</th>
+                                        <th>Check-Out</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.AttendanceDate.ToString("dd-MMM-yyyy")</td>
+                                            <td>@item.AttendanceDate.ToString("dddd")</td>
+                                            <td>
+                                                @if (item.Status == 1)
+                                                {
+                                                    <span class="badge bg-success">Present</span>
+                                                }
+                                                else if (item.Status == 2)
+                                                {
+                                                    <span class="badge bg-danger">Absent</span>
+                                                }
+                                                else if (item.Status == 3)
+                                                {
+                                                    <span class="badge bg-warning">Leave</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">Unknown</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.CheckInTime.HasValue)
+                                                {
+                                                    @item.CheckInTime.Value.ToString(@"hh\:mm")
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.CheckOutTime.HasValue)
+                                                {
+                                                    @item.CheckOutTime.Value.ToString(@"hh\:mm")
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>@item.Remarks</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                            <h5>No attendance records found</h5>
+                            <p class="text-muted">This employee has no attendance records.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+﻿@model MisProject.Models.Department
+
+@{
+    ViewBag.Title = "Department Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h4><i class="fas fa-building"></i> Department Details</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Department Code:</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.DepartmentCode)</dd>
+
+                    <dt class="col-sm-4">Department Name:</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.DepartmentName)</dd>
+
+                    <dt class="col-sm-4">Description:</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Description)</dd>
+
+                    <dt class="col-sm-4">Status:</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Inactive</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">Created Date:</dt>
+                    <dd class="col-sm-8">@Model.CreatedDate.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                    <dt class="col-sm-4">Last Modified:</dt>
+                    <dd class="col-sm-8">@(Model.ModifiedDate?.ToString("yyyy-MM-dd HH:mm") ?? "Never modified")</dd>
+                </dl>
+
+                <div class="mt-4">
+                    <a href="@Url.Action("Edit", new { id = Model.DepartmentId })" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a href="@Url.Action("Delete", new { id = Model.DepartmentId })" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                    <a href="@Url.Action("Index")" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

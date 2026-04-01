@@ -1,0 +1,112 @@
+﻿@model MisProject.Models.Department
+
+@{
+    ViewBag.Title = "Add New Department";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-building"></i> Add New Department</h4>
+            </div>
+            <div class="card-body">
+
+                <!-- VALIDATION SUMMARY -->
+                @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+                @if (ViewBag.SaveError != null)
+                {
+                    <div class="alert alert-danger">
+                        <strong>Save Error:</strong> @ViewBag.SaveError
+                    </div>
+                }
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success">
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(model => model.DepartmentCode)
+                        @Html.TextBoxFor(model => model.DepartmentCode, new
+                        {
+                            @class = "form-control",
+                            placeholder = "Enter department code (e.g., IT001)",
+                            required = "required"
+                        })
+                        @Html.ValidationMessageFor(model => model.DepartmentCode, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(model => model.DepartmentName)
+                        @Html.TextBoxFor(model => model.DepartmentName, new
+                        {
+                            @class = "form-control",
+                            placeholder = "Enter department name",
+                            required = "required"
+                        })
+                        @Html.ValidationMessageFor(model => model.DepartmentName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(model => model.Description)
+                        @Html.TextAreaFor(model => model.Description, new
+                        {
+                            @class = "form-control",
+                            rows = "3",
+                            placeholder = "Enter department description (optional)"
+                        })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(model => model.IsActive, new
+                            {
+                                @class = "form-check-input",
+                                @checked = "checked"
+                            })
+                            <label class="form-check-label" for="IsActive">
+                                Active Department
+                            </label>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Department
+                        </button>
+                        <a href="@Url.Action("Index")" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <!-- Debug script to see form data -->
+    <script>
+        $(document).ready(function() {
+            $('form').submit(function() {
+                console.log('Form submitting with data:');
+                console.log('Code:', $('#DepartmentCode').val());
+                console.log('Name:', $('#DepartmentName').val());
+                console.log('IsActive:', $('#IsActive').is(':checked'));
+            });
+        });
+    </script>
+}

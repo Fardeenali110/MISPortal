@@ -1,0 +1,474 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <div class="text-muted">
+            <i class="fas fa-calendar-alt me-2"></i>
+            @ViewBag.TodaysDate
+        </div>
+    </div>
+
+    <!-- Error Alert -->
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            @ViewBag.ErrorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Employees Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Employees
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalEmployees</div>
+                            <div class="mt-2 mb-0 text-muted text-xs">
+                                <span>Total Employees Registered</span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Departments Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Departments
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalDepartments</div>
+                            <div class="mt-2 mb-0 text-muted text-xs">
+                                <span>Active Departments</span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-building fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Attendance Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Today's Attendance
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TodaysAttendance</div>
+                            <div class="mt-2 mb-0 text-muted text-xs">
+                                <span>Present/Absent Today</span>
+                                <br />
+                                <small>
+                                    @if (ViewBag.TotalMarkedToday > 0)
+                                    {
+                                        <span class="text-success">Present: @ViewBag.PresentCount</span>
+                                        <span class="mx-1">•</span>
+                                        <span class="text-danger">Absent: @ViewBag.AbsentCount</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-warning">No attendance marked today</span>
+                                    }
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                System Status
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @if (ViewBag.SystemStatus == "Online")
+                                {
+                                    <span class="text-success">Online</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">@ViewBag.SystemStatus</span>
+                                }
+                            </div>
+                            <div class="mt-2 mb-0 text-muted text-xs">
+                                <span>All systems operational</span>
+                                <br />
+                                <small>
+                                    <i class="fas fa-clock me-1"></i>
+                                    @ViewBag.CurrentTime
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-server fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Quick Actions -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-bolt me-2"></i>Quick Actions
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="@Url.Action("MarkAttendance", "Attendance")" class="btn btn-primary btn-block">
+                                <i class="fas fa-calendar-check me-2"></i>Mark Attendance
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="@Url.Action("Index", "Employees")" class="btn btn-success btn-block">
+                                <i class="fas fa-user-plus me-2"></i>Add Employee
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="@Url.Action("Report", "Attendance")" class="btn btn-info btn-block">
+                                <i class="fas fa-chart-bar me-2"></i>View Reports
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="@Url.Action("AddToday", "Attendance")" class="btn btn-warning btn-block">
+                                <i class="fas fa-bolt me-2"></i>Quick Mark All
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6 class="text-muted mb-3">Quick Statistics:</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card bg-light mb-3">
+                                        <div class="card-body">
+                                            <h6>Today's Summary</h6>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Present:</span>
+                                                <span class="badge bg-success">@ViewBag.PresentCount</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Absent:</span>
+                                                <span class="badge bg-danger">@ViewBag.AbsentCount</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Total Marked:</span>
+                                                <span class="badge bg-info">@ViewBag.TotalMarkedToday</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card bg-light mb-3">
+                                        <div class="card-body">
+                                            <h6>System Overview</h6>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Employees:</span>
+                                                <span class="badge bg-primary">@ViewBag.TotalEmployees</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Departments:</span>
+                                                <span class="badge bg-success">@ViewBag.TotalDepartments</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Status:</span>
+                                                @if (ViewBag.SystemStatus == "Online")
+                                                {
+                                                    <span class="badge bg-success">Online</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger">@ViewBag.SystemStatus</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Welcome Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Welcome to MIS Portal</h6>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
+                             src="https://cdn-icons-png.flaticon.com/512/2906/2906274.png" alt="MIS Portal">
+                        <h4>Management Information System</h4>
+                        <p class="lead">
+                            Efficient organization management system for tracking employees, departments, and attendance.
+                            Manage your workforce effectively with real-time data and analytics.
+                        </p>
+                        <a href="@Url.Action("Index", "Attendance")" class="btn btn-primary">
+                            <i class="fas fa-calendar-alt me-2"></i>Go to Attendance
+                        </a>
+                        <a href="@Url.Action("Report", "Attendance")" class="btn btn-info">
+                            <i class="fas fa-chart-line me-2"></i>View Analytics
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-xl-4 col-lg-5">
+            <!-- Recent Activity -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-history me-2"></i>Recent Activity
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="activity-feed" id="recentActivity">
+                        <div class="text-center py-3">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading activities...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-bell me-2"></i>Notifications
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>System initialized successfully</strong>
+                        <br />
+                        <small>@DateTime.Now.ToString("MMM dd, hh:mm tt")</small>
+                    </div>
+
+                    @if (ViewBag.TotalMarkedToday == 0)
+                    {
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>No attendance marked today</strong>
+                            <br />
+                            <small>Mark attendance for employees</small>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Attendance marked for @ViewBag.TotalMarkedToday employees</strong>
+                            <br />
+                            <small>@ViewBag.PresentCount present, @ViewBag.AbsentCount absent</small>
+                        </div>
+                    }
+
+                    <div class="alert alert-light">
+                        <i class="fas fa-user-clock me-2"></i>
+                        <strong>@ViewBag.TotalEmployees employees registered</strong>
+                        <br />
+                        <small>Across @ViewBag.TotalDepartments departments</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="sticky-footer">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>&copy; @DateTime.Now.Year - MIS Portal - Management Information System</span>
+            </div>
+        </div>
+    </footer>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Load recent activity via AJAX
+            function loadRecentActivity() {
+                $.ajax({
+                    url: '@Url.Action("GetRecentActivity", "Home")',
+                    type: 'GET',
+                    success: function (activities) {
+                        var activityHtml = '';
+                        if (activities && activities.length > 0) {
+                            activities.forEach(function (activity, index) {
+                                activityHtml += `
+                                    <div class="activity-item ${index === 0 ? 'border-start-primary' : 'border-start-secondary'}">
+                                        <div class="activity-content">
+                                            <div class="timeline-item">
+                                                <div class="timeline-header">
+                                                    <span class="badge bg-primary">${index + 1}</span>
+                                                    <span class="text-muted">${activity}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                            });
+                        } else {
+                            activityHtml = '<div class="text-center py-3 text-muted">No recent activities found</div>';
+                        }
+                        $('#recentActivity').html(activityHtml);
+                    },
+                    error: function () {
+                        $('#recentActivity').html('<div class="text-center py-3 text-danger">Error loading activities</div>');
+                    }
+                });
+            }
+
+            // Auto-refresh stats every 30 seconds
+            function refreshStats() {
+                $.ajax({
+                    url: '@Url.Action("GetStats", "Home")',
+                    type: 'GET',
+                    success: function (stats) {
+                        if (stats) {
+                            // Update employee count
+                            $('.card:contains("Employees") .h5').text(stats.TotalEmployees);
+
+                            // Update department count
+                            $('.card:contains("Departments") .h5').text(stats.TotalDepartments);
+
+                            // Update attendance
+                            var attendanceText = stats.TotalMarkedToday > 0 ?
+                                stats.PresentToday + '/' + stats.TotalMarkedToday : '0/0';
+                            $('.card:contains("Today\'s Attendance") .h5').text(attendanceText);
+
+                            // Update attendance details
+                            if (stats.TotalMarkedToday > 0) {
+                                $('.card:contains("Today\'s Attendance") small').html(`
+                                    <span class="text-success">Present: ${stats.PresentToday}</span>
+                                    <span class="mx-1">•</span>
+                                    <span class="text-danger">Absent: ${stats.AbsentToday}</span>
+                                `);
+                            }
+
+                            // Update time
+                            $('.card:contains("System Status") small').html(`
+                                <span>All systems operational</span><br>
+                                <small><i class="fas fa-clock me-1"></i>${stats.CurrentTime}</small>
+                            `);
+
+                            // Update system status
+                            var statusBadge = stats.SystemStatus === 'Online' ?
+                                '<span class="text-success">Online</span>' :
+                                '<span class="text-danger">' + stats.SystemStatus + '</span>';
+                            $('.card:contains("System Status") .h5').html(statusBadge);
+
+                            // Update quick stats
+                            $('.card-body:contains("Today\'s Summary") .badge.bg-success').text(stats.PresentToday);
+                            $('.card-body:contains("Today\'s Summary") .badge.bg-danger').text(stats.AbsentToday);
+                            $('.card-body:contains("Today\'s Summary") .badge.bg-info').text(stats.TotalMarkedToday);
+                            $('.card-body:contains("System Overview") .badge.bg-primary').text(stats.TotalEmployees);
+                            $('.card-body:contains("System Overview") .badge.bg-success').text(stats.TotalDepartments);
+                        }
+                    }
+                });
+            }
+
+            // Load initial data
+            loadRecentActivity();
+
+            // Refresh stats every 30 seconds
+            setInterval(refreshStats, 30000);
+
+            // Auto-refresh activity every minute
+            setInterval(loadRecentActivity, 60000);
+        });
+    </script>
+
+    <style>
+        .activity-item {
+            padding: 10px 0;
+            border-left: 3px solid;
+            margin-left: 15px;
+            position: relative;
+        }
+
+        .border-start-primary {
+            border-left-color: #4e73df !important;
+        }
+
+        .border-start-secondary {
+            border-left-color: #858796 !important;
+        }
+
+        .activity-content {
+            padding-left: 20px;
+        }
+
+        .timeline-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+        }
+
+        .btn-block {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+    </style>
+}

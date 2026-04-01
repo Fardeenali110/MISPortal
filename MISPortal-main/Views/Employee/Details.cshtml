@@ -1,0 +1,76 @@
+﻿@model MisProject.Models.Employee
+
+@{
+    ViewBag.Title = "Employee Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h4><i class="fas fa-user"></i> Employee Details</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Employee Code:</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.EmployeeCode)</dd>
+
+                    <dt class="col-sm-4">Full Name:</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.FullName)</dd>
+
+                    <dt class="col-sm-4">Email:</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Email)</dd>
+
+                    <dt class="col-sm-4">Phone:</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.PhoneNumber)</dd>
+
+                    <dt class="col-sm-4">Date of Birth:</dt>
+                    <dd class="col-sm-8">@(Model.DateOfBirth?.ToString("yyyy-MM-dd") ?? "Not specified")</dd>
+
+                    <dt class="col-sm-4">Joining Date:</dt>
+                    <dd class="col-sm-8">@Model.JoiningDate.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-sm-4">Designation:</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Designation)</dd>
+
+                    <dt class="col-sm-4">Salary:</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Salary)</dd>
+
+                    <dt class="col-sm-4">Address:</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Address)</dd>
+
+                    <dt class="col-sm-4">Status:</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Inactive</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">Created Date:</dt>
+                    <dd class="col-sm-8">@Model.CreatedDate.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                    <dt class="col-sm-4">Last Modified:</dt>
+                    <dd class="col-sm-8">@(Model.ModifiedDate?.ToString("yyyy-MM-dd HH:mm") ?? "Never modified")</dd>
+                </dl>
+
+                <div class="mt-4">
+                    <a href="@Url.Action("Edit", new { id = Model.EmployeeId })" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a href="@Url.Action("Delete", new { id = Model.EmployeeId })" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                    <a href="@Url.Action("Index")" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

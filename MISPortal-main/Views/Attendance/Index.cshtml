@@ -1,0 +1,131 @@
+﻿@model IEnumerable<MisProject.Controllers.AttendanceController.AttendanceDto>
+@{
+    ViewBag.Title = "Attendance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-12">
+            <h2><i class="fas fa-calendar-check"></i> Attendance Management</h2>
+        </div>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Message"]
+        </div>
+    }
+
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <a href="@Url.Action("MarkAttendance")" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Mark Attendance
+            </a>
+            <a href="@Url.Action("Report")" class="btn btn-info">
+                <i class="fas fa-chart-bar"></i> View Report
+            </a>
+            <a href="@Url.Action("AddToday")" class="btn btn-success">
+                <i class="fas fa-bolt"></i> Add Today's Attendance
+            </a>
+        </div>
+        <div class="col-md-4 text-end">
+            <div class="badge bg-light text-dark p-2">
+                <i class="fas fa-calendar-day"></i> Today: @DateTime.Today.ToString("dd MMM yyyy")
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Today's Attendance</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Employee</th>
+                                    <th>Department</th>
+                                    <th>Status</th>
+                                    <th>Check-In</th>
+                                    <th>Check-Out</th>
+                                    <th>Remarks</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Any())
+                                {
+                                    int counter = 1;
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@counter</td>
+                                            <td>@item.EmployeeName</td>
+                                            <td>@item.DepartmentName</td>
+                                            <td>
+                                                @if (item.Status == 1)
+                                                {
+                                                    <span class="badge bg-success">Present</span>
+                                                }
+                                                else if (item.Status == 2)
+                                                {
+                                                    <span class="badge bg-danger">Absent</span>
+                                                }
+                                                else if (item.Status == 3)
+                                                {
+                                                    <span class="badge bg-warning">Leave</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">Unknown</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.CheckInTime.HasValue)
+                                                {
+                                                    @item.CheckInTime.Value.ToString(@"hh\:mm")
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.CheckOutTime.HasValue)
+                                                {
+                                                    @item.CheckOutTime.Value.ToString(@"hh\:mm")
+                                                }
+                                            </td>
+                                            <td>@item.Remarks</td>
+                                            <td>
+                                                <a href="@Url.Action("EmployeeAttendance", new { id = item.EmployeeId })"
+                                                   class="btn btn-sm btn-info" title="View History">
+                                                    <i class="fas fa-history"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        counter++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="8" class="text-center py-4">
+                                            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                                            <h5>No attendance records for today</h5>
+                                            <a href="@Url.Action("MarkAttendance")" class="btn btn-primary mt-2">
+                                                <i class="fas fa-plus"></i> Mark Attendance
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

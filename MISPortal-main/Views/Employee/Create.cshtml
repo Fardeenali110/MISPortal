@@ -1,0 +1,263 @@
+﻿@model MisProject.Models.Employee
+
+@{
+    ViewBag.Title = "Add New Employee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-user-plus"></i> Add New Employee</h4>
+            </div>
+            <div class="card-body">
+
+                <!-- VALIDATION AND ERROR DISPLAY -->
+                @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+                @if (ViewBag.SaveError != null)
+                {
+                    <div class="alert alert-danger">
+                        <strong>Save Error:</strong> @ViewBag.SaveError
+                    </div>
+                }
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success">
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
+                <!-- END VALIDATION -->
+                <!-- DEBUG: Add this right after line 35 (END VALIDATION comment ke baad) -->
+                @{
+                    var deptList = ViewBag.Departments as List<MisProject.Models.Department>;
+                }
+                <div class="alert alert-info">
+                    <strong>DEBUG:</strong>
+                    ViewBag.Departments is NULL: @(deptList == null) <br />
+                    Departments Count: @(deptList?.Count ?? 0)
+                    @if (deptList != null && deptList.Count > 0)
+                    {
+                        <ul>
+                            @foreach (var d in deptList)
+                            {
+                                <li>@d.DepartmentId - @d.DepartmentName (@d.DepartmentCode)</li>
+                            }
+                        </ul>
+                    }
+                </div>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.FirstName)
+                                @Html.TextBoxFor(model => model.FirstName, new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter first name",
+                                    required = "required"
+                                })
+                                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.LastName)
+                                @Html.TextBoxFor(model => model.LastName, new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter last name",
+                                    required = "required"
+                                })
+                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.Email)
+                                @Html.TextBoxFor(model => model.Email, new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter email address",
+                                    type = "email",
+                                    required = "required"
+                                })
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.PhoneNumber)
+                                @Html.TextBoxFor(model => model.PhoneNumber, new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter phone number"
+                                })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.EmployeeCode)
+                                @Html.TextBoxFor(model => model.EmployeeCode, new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter employee code",
+                                    required = "required"
+                                })
+                                @Html.ValidationMessageFor(model => model.EmployeeCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.Designation)
+                                @Html.TextBoxFor(model => model.Designation, new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter designation"
+                                })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.DateOfBirth)
+                                @Html.TextBoxFor(model => model.DateOfBirth, "{0:yyyy-MM-dd}", new
+                                {
+                                    @class = "form-control",
+                                    type = "date"
+                                })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.JoiningDate)
+                                @Html.TextBoxFor(model => model.JoiningDate, "{0:yyyy-MM-dd}", new
+                                {
+                                    @class = "form-control",
+                                    type = "date",
+                                    @Value = DateTime.Now.ToString("yyyy-MM-dd")
+                                })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.Salary)
+                                @Html.TextBoxFor(model => model.Salary, new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter salary",
+                                    type = "number",
+                                    step = "0.01",
+                                    @Value = "0"
+                                })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.DepartmentId, "Department")
+                                @if (ViewBag.Departments != null)
+                                {
+                                    @Html.DropDownListFor(model => model.DepartmentId,
+                                        new SelectList(ViewBag.Departments, "DepartmentId", "DepartmentName"),
+                                        "-- Select Department --",
+                                        new { @class = "form-control" })
+                                }
+                                else
+                                {
+                                    <select class="form-control" name="DepartmentId">
+                                        <option value="">-- No Departments Available --</option>
+                                    </select>
+                                }
+                                @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.IsActive)
+                                <div class="form-check form-switch mt-3">
+                                    @Html.CheckBoxFor(model => model.IsActive, new
+                                    {
+                                        @class = "form-check-input",
+                                        @checked = "checked"
+                                    })
+                                    <label class="form-check-label" for="IsActive">Active Employee</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(model => model.Address)
+                        @Html.TextAreaFor(model => model.Address, new
+                        {
+                            @class = "form-control",
+                            rows = "3",
+                            placeholder = "Enter address"
+                        })
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Employee
+                        </button>
+                        <a href="@Url.Action("Index")" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                        <a href="@Url.Action("Create", "Department")" class="btn btn-outline-info">
+                            <i class="fas fa-plus"></i> Add New Department
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            // Set default joining date to today
+            var today = new Date().toISOString().split('T')[0];
+            $('#JoiningDate').val(today);
+
+            // Set default salary to 0 if empty
+            if (!$('#Salary').val()) {
+                $('#Salary').val('0');
+            }
+
+            // Log form data on submit
+            $('form').submit(function () {
+                console.log('Form Data:', {
+                    FirstName: $('#FirstName').val(),
+                    LastName: $('#LastName').val(),
+                    Email: $('#Email').val(),
+                    EmployeeCode: $('#EmployeeCode').val(),
+                    DepartmentId: $('#DepartmentId').val(),
+                    JoiningDate: $('#JoiningDate').val()
+                });
+            });
+        });
+    </script>
+}

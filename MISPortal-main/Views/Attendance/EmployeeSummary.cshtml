@@ -1,0 +1,232 @@
+﻿@model MisProject.Controllers.AttendanceSummary
+
+@{
+    ViewBag.Title = "Employee Attendance Summary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // Calculate percentages
+    var totalDays = Model.Total;
+    Func<int, double> getPercentage = (count) =>
+        totalDays > 0 ? Math.Round((count / (double)totalDays) * 100, 1) : 0;
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h2><i class="fas fa-user-chart"></i> Attendance Summary</h2>
+        <h5 class="text-muted">@ViewBag.EmployeeName (@ViewBag.EmployeeCode)</h5>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="@Url.Action("Report")" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left"></i> Back to Reports
+        </a>
+    </div>
+</div>
+<hr />
+
+<div class="row">
+    <!-- Summary Cards -->
+    <div class="col-md-3">
+        <div class="card bg-success text-white mb-3">
+            <div class="card-body text-center">
+                <h1 class="display-4">@Model.Present</h1>
+                <h6>Present Days</h6>
+                <small>@getPercentage(Model.Present)% of total</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card bg-danger text-white mb-3">
+            <div class="card-body text-center">
+                <h1 class="display-4">@Model.Absent</h1>
+                <h6>Absent Days</h6>
+                <small>@getPercentage(Model.Absent)% of total</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card bg-warning text-white mb-3">
+            <div class="card-body text-center">
+                <h1 class="display-4">@Model.Late</h1>
+                <h6>Late Days</h6>
+                <small>@getPercentage(Model.Late)% of total</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card bg-info text-white mb-3">
+            <div class="card-body text-center">
+                <h1 class="display-4">@Model.HalfDay</h1>
+                <h6>Half Days</h6>
+                <small>@getPercentage(Model.HalfDay)% of total</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Progress Bars -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5><i class="fas fa-chart-line"></i> Attendance Distribution</h5>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label>Present</label>
+            <div class="progress" style="height: 25px;">
+                <div class="progress-bar bg-success" role="progressbar"
+                     style="width: @getPercentage(Model.Present)%;"
+                     aria-valuenow="@Model.Present" aria-valuemin="0" aria-valuemax="@Model.Total">
+                    @Model.Present days (@getPercentage(Model.Present)%)
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label>Absent</label>
+            <div class="progress" style="height: 25px;">
+                <div class="progress-bar bg-danger" role="progressbar"
+                     style="width: @getPercentage(Model.Absent)%;"
+                     aria-valuenow="@Model.Absent" aria-valuemin="0" aria-valuemax="@Model.Total">
+                    @Model.Absent days (@getPercentage(Model.Absent)%)
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label>Late</label>
+            <div class="progress" style="height: 25px;">
+                <div class="progress-bar bg-warning" role="progressbar"
+                     style="width: @getPercentage(Model.Late)%;"
+                     aria-valuenow="@Model.Late" aria-valuemin="0" aria-valuemax="@Model.Total">
+                    @Model.Late days (@getPercentage(Model.Late)%)
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label>Half Days</label>
+            <div class="progress" style="height: 25px;">
+                <div class="progress-bar bg-info" role="progressbar"
+                     style="width: @getPercentage(Model.HalfDay)%;"
+                     aria-valuenow="@Model.HalfDay" aria-valuemin="0" aria-valuemax="@Model.Total">
+                    @Model.HalfDay days (@getPercentage(Model.HalfDay)%)
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label>Leave</label>
+            <div class="progress" style="height: 25px;">
+                <div class="progress-bar bg-secondary" role="progressbar"
+                     style="width: @getPercentage(Model.Leave)%;"
+                     aria-valuenow="@Model.Leave" aria-valuemin="0" aria-valuemax="@Model.Total">
+                    @Model.Leave days (@getPercentage(Model.Leave)%)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-calculator"></i> Quick Stats</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <td><strong>Total Days Tracked:</strong></td>
+                        <td class="text-end">@Model.Total</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Attendance Rate:</strong></td>
+                        <td class="text-end">
+                            @if (Model.Total > 0)
+                            {
+                                var rate = Math.Round(((Model.Present + Model.HalfDay * 0.5) / Model.Total) * 100, 1);
+                                <span class="badge @(rate >= 90 ? "bg-success" : rate >= 75 ? "bg-warning" : "bg-danger")">
+                                    @rate%
+                                </span>
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Work Days Missed:</strong></td>
+                        <td class="text-end">@(Model.Absent + Model.Leave)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Punctuality Score:</strong></td>
+                        <td class="text-end">
+                            @if (Model.Total > 0)
+                            {
+                                var score = Math.Round((Model.Present / (double)(Model.Present + Model.Late)) * 100, 1);
+                                <span class="badge @(score >= 95 ? "bg-success" : score >= 85 ? "bg-warning" : "bg-danger")">
+                                    @score%
+                                </span>
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-calendar-alt"></i> Current Month (@DateTime.Now.ToString("MMMM yyyy"))</h5>
+            </div>
+            <div class="card-body text-center">
+                <div id="attendanceChart" style="height: 250px;"></div>
+                <small class="text-muted">Attendance distribution for current month</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Chart.js for pie chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function() {
+            var ctx = document.getElementById('attendanceChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Present', 'Absent', 'Late', 'Half Day', 'Leave'],
+                    datasets: [{
+                        data: [@Model.Present, @Model.Absent, @Model.Late, @Model.HalfDay, @Model.Leave],
+                        backgroundColor: [
+                            '#28a745', // Green
+                            '#dc3545', // Red
+                            '#ffc107', // Yellow
+                            '#17a2b8', // Teal
+                            '#6c757d'  // Gray
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

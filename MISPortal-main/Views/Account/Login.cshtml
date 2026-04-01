@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="font-weight-light my-4">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.Error
+                        </div>
+                    }
+
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+
+                    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="username" name="username" type="text"
+                                   placeholder="Username" required />
+                            <label for="username">
+                                <i class="fas fa-user me-2"></i>Username
+                            </label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="password" name="password"
+                                   type="password" placeholder="Password" required />
+                            <label for="password">
+                                <i class="fas fa-lock me-2"></i>Password
+                            </label>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" id="remember" type="checkbox" />
+                            <label class="form-check-label" for="remember">Remember me</label>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                            <a class="small text-muted" href="#">
+                                Forgot Password?
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                            </button>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer text-center py-3">
+                    <div class="small">
+                        <a href="@Url.Action("Register")" class="text-decoration-none">
+                            <i class="fas fa-user-plus me-2"></i>Need an account? Sign up!
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Admin Link (For first time setup) -->
+            <div class="text-center mt-3">
+                <small class="text-muted">
+                    <a href="@Url.Action("CreateAdmin")" class="text-decoration-none">
+                        <i class="fas fa-user-shield me-1"></i>Create Admin User (First Time Setup)
+                    </a>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
